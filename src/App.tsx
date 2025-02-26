@@ -37,7 +37,7 @@ interface EarningsCall {
 type AnalysisTab = 'sentiment' | 'financial' | 'investor' | 'market-impact';
 
 function App() {
-  const [selectedCompany, setSelectedCompany] = useState('Innovation Labs');
+  const [selectedCompany, setSelectedCompany] = useState('Apple Inc. (AAPL)');
   const [activeTab, setActiveTab] = useState<AnalysisTab>('sentiment');
   const [timeframe, setTimeframe] = useState<'short' | 'medium' | 'long'>('short');
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
@@ -53,9 +53,13 @@ function App() {
   const priceChangePercent = 1.35;
 
   const calls: EarningsCall[] = [
-    { company: 'Tech Corp', time: '2:00:00 PM', status: 'upcoming' },
-    { company: 'Global Industries', time: '3:30:00 PM', status: 'ongoing' },
-    { company: 'Innovation Labs', time: '10:00:00 AM', status: 'past' },
+    { company: 'Apple Inc. (AAPL)', time: '2:30:00 PM', status: 'ongoing' },
+    { company: 'Tesla Inc. (TSLA)', time: '3:00:00 PM', status: 'ongoing' },
+    { company: 'Walmart Inc. (WMT)', time: '1:45:00 PM', status: 'ongoing' },
+    { company: 'International Business Machines Corporation (IBM)', time: '2:15:00 PM', status: 'ongoing' },
+    { company: 'GameStop Corp. (GME)', time: '3:30:00 PM', status: 'ongoing' },
+    { company: 'NVIDIA Corporation (NVDA)', time: '10:00:00 AM', status: 'past' },
+    { company: 'Microsoft Corporation (MSFT)', time: '4:00:00 PM', status: 'upcoming' },
   ];
 
   const priceData = Array.from({ length: 24 }, (_, i) => ({
@@ -726,37 +730,84 @@ function App() {
             </div>
           )}
 
-          {/* Stock Price Chart */}
-          <div className="mb-8 bg-white p-6 rounded-lg border border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Stock Price</h3>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <RechartsLineChart data={priceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="time"
-                    tick={{ fontSize: 12 }}
-                    interval="preserveStartEnd"
-                  />
-                  <YAxis 
-                    domain={['auto', 'auto']}
-                    tick={{ fontSize: 12 }}
-                    tickFormatter={(value) => `$${value.toFixed(2)}`}
-                  />
-                  <Tooltip 
-                    formatter={(value: number) => [`$${value.toFixed(2)}`, 'Price']}
-                    labelFormatter={(label) => `Time: ${label}`}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="price"
-                    stroke="#4F46E5"
-                    strokeWidth={2}
-                    dot={false}
-                    activeDot={{ r: 4 }}
-                  />
-                </RechartsLineChart>
-              </ResponsiveContainer>
+          {/* Call Transcription and Key Highlights */}
+          <div className="mb-8 grid grid-cols-2 gap-6">
+            {/* Call Transcription */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900">Call Transcription</h3>
+                <button 
+                  className="text-sm text-indigo-600 hover:text-indigo-800"
+                  onClick={() => setShowTranscript(true)}
+                >
+                  View Full Transcript
+                </button>
+              </div>
+              <div className="h-64 overflow-y-auto">
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">CEO John Smith (10:05 AM):</p>
+                    <p className="text-sm text-gray-600">
+                      "Good morning everyone, and thank you for joining us today. I'm pleased to report another strong quarter for Innovation Labs, with revenue growth exceeding our expectations and significant progress across all our key initiatives..."
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">CFO Sarah Johnson (10:12 AM):</p>
+                    <p className="text-sm text-gray-600">
+                      "Our Q4 revenue reached $89.5 billion, representing an 8% year-over-year increase. Operating margin improved to 28.5%, up 250 basis points from the previous quarter..."
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">Analyst, Morgan Stanley (10:35 AM):</p>
+                    <p className="text-sm text-gray-600">
+                      "Can you provide more color on the expansion plans in the APAC region?"
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">CEO John Smith (10:36 AM):</p>
+                    <p className="text-sm text-gray-600">
+                      "Certainly. We're seeing tremendous opportunity in the APAC market, particularly in emerging economies. Our plan involves a phased approach starting with key metropolitan areas..."
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Key Highlights */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900">Key Highlights</h3>
+                <button 
+                  className="text-sm text-indigo-600 hover:text-indigo-800"
+                  onClick={() => setShowSummary(true)}
+                >
+                  View Full Summary
+                </button>
+              </div>
+              <div className="h-64 overflow-y-auto">
+                <div className="space-y-4">
+                  <div className="p-3 bg-green-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-green-800">Revenue Growth</h4>
+                    <p className="text-sm text-green-700">8% year-over-year increase to $89.5B, exceeding analyst expectations of $87.2B</p>
+                  </div>
+                  <div className="p-3 bg-blue-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-blue-800">Operating Margin</h4>
+                    <p className="text-sm text-blue-700">Improved to 28.5%, up 250 basis points from previous quarter</p>
+                  </div>
+                  <div className="p-3 bg-purple-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-purple-800">APAC Expansion</h4>
+                    <p className="text-sm text-purple-700">New market entry planned for Q2 with initial focus on metropolitan areas</p>
+                  </div>
+                  <div className="p-3 bg-yellow-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-yellow-800">Strategic Acquisition</h4>
+                    <p className="text-sm text-yellow-700">Announced acquisition of TechStart for $500M to enhance AI capabilities</p>
+                  </div>
+                  <div className="p-3 bg-red-50 rounded-lg">
+                    <h4 className="text-sm font-medium text-red-800">Risk Factor</h4>
+                    <p className="text-sm text-red-700">Noted potential supply chain disruptions in Asia that could impact Q2 deliveries</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
